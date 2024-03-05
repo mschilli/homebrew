@@ -1,9 +1,9 @@
 module ynabler
 
-go 1.19
+go 1.22.0
 
 require (
-	github.com/mschilli/go-ynabler v0.0.0-20240305220750-29ea785b2333
+	github.com/mschilli/go-ynabler v0.0.2
 	go.uber.org/zap v1.27.0
 )
 
