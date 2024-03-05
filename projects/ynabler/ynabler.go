@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/mschilli/ynabler"
+	"github.com/mschilli/go-ynabler"
 	"go.uber.org/zap"
 )
 
