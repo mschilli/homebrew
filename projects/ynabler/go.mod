@@ -1,6 +1,6 @@
 module ynabler
 
-go 1.21.6
+go 1.19
 
 require (
 	github.com/mschilli/go-ynabler v0.0.0-20240305220750-29ea785b2333
