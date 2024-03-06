@@ -7,7 +7,7 @@ import (
 	"go.uber.org/zap"
 )
 
-const Version = "0.0.1"
+const Version = "0.0.2"
 
 func main() {
 	verbose := flag.Bool("verbose", false, "Verbose mode")
@@ -15,7 +15,7 @@ func main() {
 	flag.Parse()
 
 	if *version {
-		fmt.Println(Version)
+		fmt.Println(Version, ynabler.Version)
 		return
 	}
 
