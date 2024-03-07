@@ -6,10 +6,12 @@ class Ynabler < Formula
     head git_url, :using => :git
     homepage "https://github.com/mschilli"
 
+    depends_on "go" => :build
+
     def install
       ENV['GOPATH'] = buildpath
       cd "projects/ynabler" do
-	  system "/usr/local/bin/go", "build"
+	  system "go", "build"
 	  bin.install "ynabler"
       end
     end
