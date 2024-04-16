@@ -7,7 +7,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 )
@@ -35,11 +34,11 @@ func main() {
 
 	jpgFile := flag.Arg(0)
 
-	data, err := ioutil.ReadFile(jpgFile)
+	sl, err := extractSegmentList(jpgFile)
 	if err != nil {
 		panic(err)
 	}
-	orientation, err := readOrientation(data)
+	orientation, err := readOrientation(sl)
 	if err != nil {
 		panic(err)
 	}
