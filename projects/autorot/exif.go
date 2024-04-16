@@ -3,9 +3,8 @@ package main
 import (
 	"errors"
 	"io/ioutil"
-	"strconv"
 
-	"github.com/dsoprea/go-exif/v3"
+	//"github.com/dsoprea/go-exif/v3"
 	"github.com/dsoprea/go-jpeg-image-structure/v2"
 )
 
@@ -33,23 +32,17 @@ func exifSegmentList(filename string) (*jpegstructure.SegmentList, error) {
 }
 
 func exifOrientation(sl *jpegstructure.SegmentList) (uint16, error) {
-	_, _, et, err := sl.DumpExif()
+	rootIfd, _, err := sl.Exif()
 	if err != nil {
-		if err == exif.ErrNoExif {
-			return 0, errors.New("no exif")
-		}
+		return 0, errors.New("exif parse error")
 	}
 
-	for _, tag := range et {
-		if tag.TagName == "Orientation" {
-			o, err := strconv.Atoi(tag.FormattedFirst)
-			if err != nil {
-				return 0, err
-			}
+	otag, err := rootIfd.FindTagWithName("Orientation")
+	orientation, err := otag[0].Value()
 
-			return uint16(o), nil
-		}
+	if err != nil {
+		return 0, errors.New("exif orientation value parse error")
 	}
 
-	return 0, errors.New("Orientation tag not found")
+	return orientation.([]uint16)[0], nil
 }
