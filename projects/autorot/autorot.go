@@ -34,11 +34,11 @@ func main() {
 
 	jpgFile := flag.Arg(0)
 
-	sl, err := exifSegmentList(jpgFile)
+	sl, err := exifExtractSegmentList(jpgFile)
 	if err != nil {
 		panic(err)
 	}
-	orientation, err := exifOrientation(sl)
+	orientation, err := exifReadOrientation(sl)
 	if err != nil {
 		panic(err)
 	}
