@@ -9,7 +9,7 @@ import (
 	"github.com/dsoprea/go-jpeg-image-structure/v2"
 )
 
-func extractSegmentList(filename string) (*jpegstructure.SegmentList, error) {
+func exifSegmentList(filename string) (*jpegstructure.SegmentList, error) {
 	var sl *jpegstructure.SegmentList
 
 	data, err := ioutil.ReadFile(filename)
@@ -32,7 +32,7 @@ func extractSegmentList(filename string) (*jpegstructure.SegmentList, error) {
 	return sl, nil
 }
 
-func readOrientation(sl *jpegstructure.SegmentList) (uint16, error) {
+func exifOrientation(sl *jpegstructure.SegmentList) (uint16, error) {
 	_, _, et, err := sl.DumpExif()
 	if err != nil {
 		if err == exif.ErrNoExif {
