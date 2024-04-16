@@ -7,12 +7,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/rwcarlsen/goexif/exif"
+	"io/ioutil"
 	"os"
 	"path"
 )
 
-const Version = "0.02"
+const Version = "0.03"
 
 func main() {
 	flag.Usage = func() {
@@ -35,28 +35,16 @@ func main() {
 
 	jpgFile := flag.Arg(0)
 
-	f, err := os.Open(jpgFile)
+	data, err := ioutil.ReadFile(jpgFile)
+	if err != nil {
+		panic(err)
+	}
+	orientation, err := readOrientation(data)
 	if err != nil {
 		panic(err)
 	}
 
-	data, err := exif.Decode(f)
-	if err != nil {
-		panic(err)
-	}
-
-	orient, err := data.Get(exif.Orientation)
-	if err != nil {
-		fmt.Printf("No orientation header found.\n")
-		os.Exit(0)
-	}
-
-	val, err := orient.Int(0)
-	if err != nil {
-		panic(err)
-	}
-
-	switch val {
+	switch orientation {
 	case 3:
 		if *dryrun {
 			fmt.Printf("Rotate by 180 degrees\n")
@@ -70,6 +58,6 @@ func main() {
 			imgMod(jpgFile, jpgFile, rot90)
 		}
 	default:
-		panic(fmt.Sprintf("Unknown orientation: %d\n", val))
+		panic(fmt.Sprintf("Unknown orientation: %d\n", orientation))
 	}
 }
