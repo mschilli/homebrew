@@ -1,7 +1,7 @@
 class Ynabler < Formula
     git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
-    version "0.0.2"
+    version "0.0.3"
     desc ""
     head git_url, :using => :git
     homepage "https://github.com/mschilli"
