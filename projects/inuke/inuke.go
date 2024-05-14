@@ -17,14 +17,24 @@ import (
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 	"github.com/hashicorp/golang-lru"
+	"path"
 	"path/filepath"
 )
 
 var Cache *lru.Cache
 
-const Version = "1.4"
+const Version = "1.5"
 
 func main() {
+	version := flag.Bool("version", false, "print version info")
+
+	flag.Parse()
+
+	if *version {
+		fmt.Printf("%s %s\n", path.Base(os.Args[0]), Version)
+		return
+	}
+
 	win := app.New().NewWindow(versionInfo())
 
 	var err error
