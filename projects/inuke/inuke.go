@@ -1,13 +1,14 @@
-/////////////////////////////////////////
+// ///////////////////////////////////////
 // inuke.go - GUI to sort out bad images
 // Mike Schilli, 2021 (m@perlmeister.com)
-/////////////////////////////////////////
+// ///////////////////////////////////////
 package main
 
 import (
 	"container/list"
 	"os"
 
+	"flag"
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -69,7 +70,7 @@ func main() {
 	con := container.NewVBox(img, lbl)
 	win.SetContent(con)
 
-	showURI(win, cur.Value.(fyne.URI))
+	showURI(win, cur.Value.(fyne.URI), images.Len())
 	showImage(img, cur.Value.(fyne.URI))
 	preloadImage(scrollRight(images,
 		cur).Value.(fyne.URI))
@@ -107,7 +108,7 @@ func main() {
 			case "Q":
 				os.Exit(0)
 			}
-			showURI(win, cur.Value.(fyne.URI))
+			showURI(win, cur.Value.(fyne.URI), images.Len())
 			showImage(img,
 				cur.Value.(fyne.URI))
 			preloadImage(scrollRight(images,
@@ -121,8 +122,8 @@ func versionInfo() string {
 	return fmt.Sprintf("iNuke v%s", Version)
 }
 
-func showURI(win fyne.Window, uri fyne.URI) {
-	win.SetTitle(filepath.Base(uri.String()))
+func showURI(win fyne.Window, uri fyne.URI, length int) {
+	win.SetTitle(fmt.Sprintf("%s (%d)", filepath.Base(uri.String()), length))
 }
 
 func scrollRight(l *list.List,
