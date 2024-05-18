@@ -198,6 +198,8 @@ func whackerNew(l *list.List) *whackStack {
 }
 
 func (w *whackStack) WhackerStart() {
+	// Try to preload all images one by one, and whack those that can't be loaded,
+	// so inuke won't even display them later
 	go func() {
 		e := w.images.Front()
 		for {
