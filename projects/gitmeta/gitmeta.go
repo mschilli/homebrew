@@ -1,18 +1,36 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/user"
+	"path"
 	"path/filepath"
 )
 
+const Version = "0.02"
+
 func main() {
-	if len(os.Args) != 2 {
-		panic(fmt.Errorf("usage: %s repos.gmf", os.Args[0]))
+	version := flag.Bool("version", false, "print release version and exit")
+
+	flag.Usage = func() {
+		fmt.Printf("%s repos.gmf", path.Base(os.Args[0]))
+		os.Exit(1)
 	}
 
-	cfg := os.Args[1]
+	flag.Parse()
+
+	if *version {
+		fmt.Printf("%s %s\n", path.Base(os.Args[0]), Version)
+		return
+	}
+
+	if flag.NArg() != 1 {
+		flag.Usage()
+	}
+
+	cfg := flag.Arg(0)
 
 	gmf := NewGitmeta()
 
