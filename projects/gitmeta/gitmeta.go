@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 )
 
-const Version = "0.02"
+const Version = "0.03"
 
 func main() {
 	version := flag.Bool("version", false, "print release version and exit")
