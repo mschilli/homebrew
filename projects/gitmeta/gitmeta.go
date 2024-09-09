@@ -15,7 +15,7 @@ func main() {
 	version := flag.Bool("version", false, "print release version and exit")
 
 	flag.Usage = func() {
-		fmt.Printf("%s repos.gmf", path.Base(os.Args[0]))
+		fmt.Printf("%s repos.gmf\n", path.Base(os.Args[0]))
 		os.Exit(1)
 	}
 
