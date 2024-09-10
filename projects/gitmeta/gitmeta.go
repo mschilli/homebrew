@@ -29,11 +29,25 @@ func main() {
 		return
 	}
 
-	config := zap.NewProductionConfig()
-	if *debug {
-		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	config := zapcore.EncoderConfig{
+		MessageKey:   "message",
+		EncodeTime:   nil,
+		EncodeLevel:  nil,
+		EncodeCaller: nil,
 	}
-	blog, _ := config.Build()
+	core := zapcore.NewCore(
+		zapcore.NewConsoleEncoder(config),
+		zapcore.AddSync(os.Stdout),
+		zap.InfoLevel,
+	)
+	blog := zap.New(core)
+	defer blog.Sync()
+
+	if *debug {
+		config := zap.NewProductionConfig()
+		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+		blog, _ = config.Build()
+	}
 
 	log := blog.Sugar()
 

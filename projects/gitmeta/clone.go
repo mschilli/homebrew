@@ -61,7 +61,7 @@ restart:
 				triggered = true
 				exp.Cancel()
 			case <-exp.Released:
-				slog.Infow("Ended", "cmd", args[0])
+				slog.Debugw("Ended", "cmd", args[0])
 				if triggered {
 					continue restart
 				}
