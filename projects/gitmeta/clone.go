@@ -2,17 +2,20 @@ package main
 
 import (
 	"github.com/mittwingate/expectre"
-	"log"
+	"go.uber.org/zap"
 	"os"
 	"path"
 	"time"
 )
 
-func cloneOrUpdate(c Cloneable, gitPath string) error {
+const GitPath = "/usr/bin/git"
+
+func cloneOrUpdate(slog *zap.SugaredLogger, c Cloneable, gitPath string) error {
 	fullPath := path.Join(gitPath, c.Dir)
 	_, err := os.Stat(fullPath)
 	if os.IsNotExist(err) {
-		err := yoyo("/usr/bin/git", "clone", c.URL, fullPath)
+		slog.Infow("Cloning", "repo", c.URL, "dir", fullPath)
+		err := yoyo(slog, GitPath, "clone", c.URL, fullPath)
 		if err != nil {
 			return err
 		}
@@ -22,17 +25,23 @@ func cloneOrUpdate(c Cloneable, gitPath string) error {
 	if err != nil {
 		return err
 	}
-	err = yoyo("/usr/bin/git", "pull")
-	return err
+	slog.Infow("Updating", "dir", fullPath)
+	err = yoyo(slog, GitPath, "pull")
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 const Timeout = 30
 const MaxTries = 3
 
-func yoyo(args ...string) error {
+func yoyo(slog *zap.SugaredLogger, args ...string) error {
+	slog.Debugw("yoyo", "args", args, "timeout", Timeout, "maxtries", MaxTries)
 restart:
 	for try := 0; try <= MaxTries; try++ {
-		log.Printf("Starting %s ...\n", args[0])
+		slog.Debugw("Starting", "cmd", args)
 		exp := expectre.New()
 		err := exp.Spawn(args...)
 		if err != nil {
@@ -44,15 +53,15 @@ restart:
 		for {
 			select {
 			case val := <-exp.Stdout:
-				log.Println(val)
+				slog.Info(val)
 			case val := <-exp.Stderr:
-				log.Println(val)
+				slog.Info(val)
 			case <-time.After(time.Duration(Timeout) * time.Second):
-				log.Printf("Timed out. Shutting down ...\n")
+				slog.Infow("Timeout, shutting down", "cmd", args[0])
 				triggered = true
 				exp.Cancel()
 			case <-exp.Released:
-				log.Printf("%s ended.\n", args[0])
+				slog.Infow("Ended", "cmd", args[0])
 				if triggered {
 					continue restart
 				}

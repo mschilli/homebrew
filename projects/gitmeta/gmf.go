@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -11,6 +12,7 @@ type Cloneable struct {
 }
 
 type Gitmeta struct {
+	Logger     *zap.SugaredLogger
 	Cloneables []Cloneable
 }
 
@@ -27,6 +29,7 @@ func (g *Gitmeta) FindPlugin(m GitMetaEntry) (PluginIf, error) {
 	}
 	for _, plugin := range plugins {
 		if plugin.Applicable(m) {
+			g.Logger.Debugw("Plugin found", "plugin", plugin)
 			return plugin, nil
 		}
 	}
@@ -40,6 +43,7 @@ func NewGitmeta() *Gitmeta {
 }
 
 func (g *Gitmeta) AddGMF(f *os.File) error {
+	g.Logger.Debugw("Adding", "file", f.Name())
 	entries, err := g.parseGMF(f)
 	if err != nil {
 		return err
@@ -55,6 +59,7 @@ func (g *Gitmeta) AddGMF(f *os.File) error {
 			return err
 		}
 		for _, cloneable := range cloneables {
+			g.Logger.Debugw("Adding", "cloneable", cloneable.URL)
 			g.Cloneables = append(g.Cloneables, cloneable)
 		}
 	}

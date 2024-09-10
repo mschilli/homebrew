@@ -3,16 +3,19 @@ package main
 import (
 	"flag"
 	"fmt"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"os"
 	"os/user"
 	"path"
 	"path/filepath"
 )
 
-const Version = "0.03"
+const Version = "0.04"
 
 func main() {
 	version := flag.Bool("version", false, "print release version and exit")
+	debug := flag.Bool("debug", false, "print verbose debug info")
 
 	flag.Usage = func() {
 		fmt.Printf("%s repos.gmf\n", path.Base(os.Args[0]))
@@ -26,6 +29,14 @@ func main() {
 		return
 	}
 
+	config := zap.NewProductionConfig()
+	if *debug {
+		config.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	}
+	blog, _ := config.Build()
+
+	log := blog.Sugar()
+
 	if flag.NArg() != 1 {
 		flag.Usage()
 	}
@@ -33,6 +44,7 @@ func main() {
 	cfg := flag.Arg(0)
 
 	gmf := NewGitmeta()
+	gmf.Logger = log
 
 	f, err := os.Open(cfg)
 	if err != nil {
@@ -52,8 +64,7 @@ func main() {
 	}
 
 	for _, c := range gmf.AllCloneables() {
-		fmt.Printf("Cloning %v\n", c)
-		err := cloneOrUpdate(c, gitDir)
+		err := cloneOrUpdate(log, c, gitDir)
 		if err != nil {
 			panic(err)
 		}

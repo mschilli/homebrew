@@ -1,7 +1,7 @@
 class Gitmeta < Formula
     git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
-    version "0.03"
+    version "0.04"
     desc "Parse .gmf git meta format files and update local repos"
     head git_url, :using => :git
     homepage "https://perlmeister.com"
