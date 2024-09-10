@@ -11,14 +11,15 @@ import (
 	"path/filepath"
 )
 
-const Version = "0.06"
+const Version = "0.07"
 
 func main() {
 	version := flag.Bool("version", false, "print release version and exit")
 	debug := flag.Bool("debug", false, "print verbose debug info")
+	dryrun := flag.Bool("dryrun", false, "report planned actions only")
 
 	flag.Usage = func() {
-		fmt.Printf("Usage: %s [--version] [--debug] [repos.gmf ...]\n",
+		fmt.Printf("Usage: %s [--version] [--debug] [--dryrun] [repos.gmf ...]\n",
 			path.Base(os.Args[0]))
 		os.Exit(1)
 	}
@@ -80,7 +81,7 @@ func main() {
 	}
 
 	for _, c := range gmf.AllCloneables() {
-		err := cloneOrUpdate(log, c, gitDir)
+		err := cloneOrUpdate(log, *dryrun, c, gitDir)
 		if err != nil {
 			panic(err)
 		}

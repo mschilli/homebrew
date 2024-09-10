@@ -10,11 +10,19 @@ import (
 
 const GitPath = "/usr/bin/git"
 
-func cloneOrUpdate(slog *zap.SugaredLogger, c Cloneable, gitPath string) error {
+func cloneOrUpdate(slog *zap.SugaredLogger, dryrun bool,
+	c Cloneable, gitPath string) error {
 	fullPath := path.Join(gitPath, c.Dir)
 	_, err := os.Stat(fullPath)
 	if os.IsNotExist(err) {
-		slog.Infow("Cloning", "repo", c.URL, "dir", fullPath)
+		action := "Cloning"
+		if dryrun {
+			action += " (dryrun)"
+		}
+		slog.Infow(action, "repo", c.URL, "dir", fullPath)
+		if dryrun {
+			return nil
+		}
 		err := yoyo(slog, GitPath, "clone", c.URL, fullPath)
 		if err != nil {
 			return err
@@ -25,7 +33,15 @@ func cloneOrUpdate(slog *zap.SugaredLogger, c Cloneable, gitPath string) error {
 	if err != nil {
 		return err
 	}
-	slog.Infow("Updating", "dir", fullPath)
+
+	action := "Updating"
+	if dryrun {
+		action += " (dryrun)"
+	}
+	slog.Infow(action, "dir", fullPath)
+	if dryrun {
+		return nil
+	}
 	err = yoyo(slog, GitPath, "pull")
 	if err != nil {
 		return err
