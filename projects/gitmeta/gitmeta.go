@@ -18,7 +18,8 @@ func main() {
 	debug := flag.Bool("debug", false, "print verbose debug info")
 
 	flag.Usage = func() {
-		fmt.Printf("%s repos.gmf\n", path.Base(os.Args[0]))
+		fmt.Printf("Usage: %s [--version] [--debug] [repos.gmf ...]\n",
+			path.Base(os.Args[0]))
 		os.Exit(1)
 	}
 
