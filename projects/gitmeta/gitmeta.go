@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 )
 
-const Version = "0.05"
+const Version = "0.06"
 
 func main() {
 	version := flag.Bool("version", false, "print release version and exit")
@@ -51,21 +51,22 @@ func main() {
 
 	log := blog.Sugar()
 
-	if flag.NArg() != 1 {
-		flag.Usage()
-	}
-
-	cfg := flag.Arg(0)
-
 	gmf := NewGitmeta()
 	gmf.Logger = log
 
-	f, err := os.Open(cfg)
-	if err != nil {
-		panic(err)
-	}
+	if flag.NArg() == 0 {
+		log.Info("Waiting for data on stdin")
+		gmf.AddGMF(os.Stdin)
+	} else {
+		for _, arg := range flag.Args() {
+			f, err := os.Open(arg)
+			if err != nil {
+				panic(err)
+			}
 
-	gmf.AddGMF(f)
+			gmf.AddGMF(f)
+		}
+	}
 
 	usr, err := user.Current()
 	if err != nil {
