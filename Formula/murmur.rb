@@ -1,5 +1,5 @@
 class Murmur < Formula
-    git_url = "https://github.com/mschilli/murmur"
+    git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
     version "0.0.1"
     desc "Handle secrets with Murmur"
