@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/mittwingate/expectre"
 	"go.uber.org/zap"
 	"os"
@@ -80,6 +81,9 @@ restart:
 				slog.Debugw("Ended", "cmd", args[0])
 				if triggered {
 					continue restart
+				}
+				if exp.ExitCode != 0 {
+					return fmt.Errorf("%v failed with exit code %d", args, exp.ExitCode)
 				}
 				break restart
 			}
