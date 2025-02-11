@@ -43,6 +43,12 @@ func cloneOrUpdate(slog *zap.SugaredLogger, dryrun bool,
 	if dryrun {
 		return nil
 	}
+
+	err = yoyo(slog, GitPath, "submodule", "foreach", GitPath, "pull")
+	if err != nil {
+		return err
+	}
+
 	err = yoyo(slog, GitPath, "pull")
 	if err != nil {
 		return err
