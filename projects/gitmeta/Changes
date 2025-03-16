@@ -1,3 +1,4 @@
+0.10 add submodule update
 0.09 check git pull/clone exit codes via yoyo/expectre
 0.08 balk at failing git pulls (merge conflicts etc)
 0.02 add --version
