@@ -1,7 +1,7 @@
 class Gittree < Formula
     git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
-    version "0.10"
+    version "0.11"
     desc "Track git tree in Terminal UI"
     head git_url, :using => :git
     homepage "https://perlmeister.com"

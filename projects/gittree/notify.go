@@ -39,6 +39,7 @@ func (n *Notifier) Wait(minWait time.Duration) {
 					if err != nil {
 						// report but ignore, could be race
 						n.logger.Error("Can't stat", zap.String("dir", ev.Name))
+						continue
 					}
 
 					if info.IsDir() {

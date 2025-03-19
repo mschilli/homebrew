@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-const Version = "0.10"
+const Version = "0.11"
 
 func main() {
 	debug := flag.Bool("debug", false, "enable debug to file")
