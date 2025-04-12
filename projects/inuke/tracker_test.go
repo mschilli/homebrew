@@ -16,4 +16,22 @@ func TestTracker(t *testing.T) {
 		t.Log("Expected current at", 3, " but got ", tr.Current())
 		t.Fail()
 	}
+
+	tr.MoveRight()
+	if tr.Current() != 1 {
+		t.Log("Expected current at", 1, " but got ", tr.Current())
+		t.Fail()
+	}
+
+	tr.MoveLeft()
+	tr.RemoveCurrent()
+
+	if tr.Total() != 2 {
+		t.Log("Expected total at", 2, " but got ", tr.Total())
+		t.Fail()
+	}
+	if tr.Current() != 1 {
+		t.Log("Expected total at", 1, " but got ", tr.Current())
+		t.Fail()
+	}
 }

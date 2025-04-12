@@ -24,9 +24,8 @@ func (t *Tracker) Total() int {
 	return t.total
 }
 
-func (t *Tracker) InsertLeft() {
+func (t *Tracker) SpliceCurrent() {
 	t.total += 1
-	t.currentIdx += 1
 }
 
 func (t *Tracker) MoveLeft() {
