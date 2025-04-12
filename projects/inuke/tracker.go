@@ -44,13 +44,12 @@ func (t *Tracker) MoveRight() {
 	}
 }
 
-func (t *Tracker) RemoveCurrent() {
+func (t *Tracker) RemoveLeft() {
 	if t.total == 0 {
 		panic("Can't remove element from zero length array")
 	}
 	t.total -= 1
-	if t.currentIdx > t.total-1 {
-		t.MoveLeft()
+	if t.currentIdx > 0 {
+	    t.currentIdx -= 1
 	}
-	t.MoveRight()
 }

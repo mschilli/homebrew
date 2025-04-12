@@ -24,7 +24,8 @@ func TestTracker(t *testing.T) {
 	}
 
 	tr.MoveLeft()
-	tr.RemoveCurrent()
+	tr.MoveRight()
+	tr.RemoveLeft()
 
 	if tr.Total() != 2 {
 		t.Log("Expected total at", 2, " but got ", tr.Total())

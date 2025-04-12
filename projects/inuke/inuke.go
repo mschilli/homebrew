@@ -23,7 +23,7 @@ import (
 
 var Cache *lru.Cache
 
-const Version = "1.5"
+const Version = "1.6"
 
 func main() {
 	version := flag.Bool("version", false, "print version info")
@@ -80,10 +80,12 @@ func main() {
 	con := container.NewVBox(img, lbl)
 	win.SetContent(con)
 
-	showURI(win, cur.Value.(fyne.URI), images.Len())
+	showURI(win, cur.Value.(fyne.URI), 1, images.Len())
 	showImage(img, cur.Value.(fyne.URI))
 	preloadImage(scrollRight(images,
 		cur).Value.(fyne.URI))
+
+	tr := NewTracker(images.Len())
 
 	win.Canvas().SetOnTypedKey(
 		func(ev *fyne.KeyEvent) {
@@ -91,8 +93,10 @@ func main() {
 			switch key {
 			case "L":
 				cur = scrollRight(images, cur)
+				tr.MoveRight()
 			case "H":
 				cur = scrollLeft(images, cur)
+				tr.MoveLeft()
 			case "D":
 				if images.Len() == 1 {
 					panic("Not enough images!!")
@@ -105,6 +109,7 @@ func main() {
 
 				toTrash(old.Value.(fyne.URI))
 				images.Remove(old)
+				tr.RemoveLeft()
 			case "S":
 				toStash(cur.Value.(fyne.URI))
 			case "U":
@@ -118,7 +123,8 @@ func main() {
 			case "Q":
 				os.Exit(0)
 			}
-			showURI(win, cur.Value.(fyne.URI), images.Len())
+			showURI(win, cur.Value.(fyne.URI),
+			    tr.Current(), images.Len())
 			showImage(img,
 				cur.Value.(fyne.URI))
 			preloadImage(scrollRight(images,
@@ -132,8 +138,9 @@ func versionInfo() string {
 	return fmt.Sprintf("iNuke v%s", Version)
 }
 
-func showURI(win fyne.Window, uri fyne.URI, length int) {
-	win.SetTitle(fmt.Sprintf("%s (%d)", filepath.Base(uri.String()), length))
+func showURI(win fyne.Window, uri fyne.URI, current int, length int) {
+	win.SetTitle(fmt.Sprintf("%s (%d of %d)",
+	    filepath.Base(uri.String()), current, length))
 }
 
 func scrollRight(l *list.List,
