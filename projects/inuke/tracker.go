@@ -26,7 +26,6 @@ func (t *Tracker) Total() int {
 
 func (t *Tracker) InsertLeft() {
     t.total += 1
-    t.MoveLeft()
 }
 
 func (t *Tracker) MoveLeft() {

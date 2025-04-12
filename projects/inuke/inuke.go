@@ -119,9 +119,9 @@ func main() {
 					return
 				}
 				images.InsertBefore(uri, cur)
+				tr.InsertLeft()
 				fromTrash(uri)
 				cur = scrollLeft(images, cur)
-				tr.InsertLeft()
 			case "Q":
 				os.Exit(0)
 			}
