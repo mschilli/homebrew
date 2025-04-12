@@ -103,6 +103,7 @@ func main() {
 				}
 				old := cur
 				cur = scrollRight(images, cur)
+				tr.MoveRight()
 				uri := old.Value.(fyne.URI)
 
 				undo.Push(uri)
@@ -120,6 +121,7 @@ func main() {
 				images.InsertBefore(uri, cur)
 				fromTrash(uri)
 				cur = scrollLeft(images, cur)
+				tr.InsertLeft()
 			case "Q":
 				os.Exit(0)
 			}
@@ -207,6 +209,9 @@ func whackerNew(l *list.List) *whackStack {
 func (w *whackStack) WhackerStart() {
 	// Try to preload all images one by one, and whack those that can't be loaded,
 	// so inuke won't even display them later
+	if w.images.Len() == 0 {
+	    return
+	}
 	go func() {
 		e := w.images.Front()
 		for {
