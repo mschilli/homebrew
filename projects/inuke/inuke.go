@@ -27,6 +27,7 @@ const Version = "1.6"
 
 func main() {
 	version := flag.Bool("version", false, "print version info")
+	offset := flag.Int("offset", 0, "start with image at idx")
 
 	flag.Parse()
 
@@ -71,12 +72,18 @@ func main() {
 	}
 
 	cur := images.Front()
+	if *offset != 0 {
+	    for i := 0; i < *offset; i++ {
+		cur = scrollRight(images, cur)
+	    }
+	}
 
 	img := canvas.NewImageFromResource(nil)
 	img.SetMinSize(
 		fyne.NewSize(DspWidth, DspHeight))
 	lbl := widget.NewLabel(
-		fmt.Sprintf("%s  [H]-Left [L]-Right [D]elete [U]ndo [S]tash [Q]uit", versionInfo()))
+		fmt.Sprintf("%s  [H]-Left [L]-Right [D]elete " +
+		    "[U]ndo [S]tash [Q]uit", versionInfo()))
 	con := container.NewVBox(img, lbl)
 	win.SetContent(con)
 
