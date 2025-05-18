@@ -7,7 +7,7 @@ class Ynabler < Formula
     depends_on "go" => :build
 
     def install
-	system "go", "build", "./cmd/ynabler"
+	system "go", "build", "-o", bin/"ynabler", "./cmd/ynabler"
 	system "go", "build", "-o", bin/"ynabler-annotate", "./annotate/cmd"
     end
 
