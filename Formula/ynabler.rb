@@ -8,7 +8,7 @@ class Ynabler < Formula
 
     def install
 	system "go", "build", "./cmd/ynabler"
-	system "go", "build", "-o", bin/"ynabler-annotate", "annotate/cmd/annotate"
+	system "go", "build", "-o", bin/"ynabler-annotate", "annotate/cmd"
     end
 
     test do
