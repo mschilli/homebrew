@@ -7,8 +7,12 @@ package main
 import (
 	"io"
 	tmpl "text/template"
+	"embed"
 	"time"
 )
+
+//go:embed tmpl/*
+var tmplFS embed.FS
 
 type Photo struct {
 	Path  string
@@ -32,7 +36,7 @@ func (td *TmplData) Init() error {
 	td.Date = time.Now().Format("2006-01-02")
 	td.OgDesc = "Photos uploaded"
 
-	te, err := tmpl.ParseGlob("tmpl/*.html")
+	te, err := tmpl.ParseFS(tmplFS, "tmpl/*.html")
 	td.TmplEngine = te
 	return err
 }
