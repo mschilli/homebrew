@@ -1,0 +1,7 @@
+    <div class="photo-gallery">
+
+    {{range .Photos}}
+    <div class='photo'> <a HREF={{.Path}}><img src={{.Thumb}}></img></a></div>\n
+    {{end}}
+
+    </div>

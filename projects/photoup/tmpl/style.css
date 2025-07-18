@@ -1,0 +1,100 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 20px;
+}
+
+.photo img {
+    max-width: 100%;
+    height: auto;
+}
+
+.text {
+    margin-top: 20px;
+}
+
+.intro {
+    max-width: 80%;
+    margin-left: 20px;
+}
+
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+    }
+
+    .photo, .text {
+        flex: 1;
+        max-width: 50%;
+    }
+
+    .text {
+        margin-left: 20px;
+        margin-top: 0;
+    }
+}
+
+/* Global Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    /* Ensures the body takes full viewport width */
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+/* Photo Gallery Styles */
+.photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers images when they don't fill the entire row */
+    margin: -2px;
+    background-color: black;
+}
+
+.photo-gallery img {
+    /* Ensures images grow with flexibility but also have a max-width */
+    flex: 1 0 calc(33.333% - 4px); /* Starts with 3 images per row */
+    max-width: 300px; /* Prevents images from growing too large */
+    margin: 2px; /* Minimal space between images */
+    height: auto; /* Adjust if you want to control the height */
+    object-fit: cover; /* Covers the area of the container without distortion */
+}
+
+@media (max-width: 768px) {
+    .photo-gallery img {
+        flex: 1 0 calc(50% - 4px); /* Adjusts to 2 images per row on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .photo-gallery img {
+        flex: 1 0 calc(100% - 4px); /* Single image per row on very small screens */
+    }
+}
+
+.navbar {
+    background-color: #000; /* Black background */
+    padding: 10px 20px; /* Add some padding */
+    display: flex; /* Use flexbox for alignment */
+    justify-content: start; /* Align items to the start of the nav */
+    align-items: center; /* Center items vertically */
+}
+
+.navbar a {
+    color: white; /* White text color */
+    text-decoration: none; /* No underline */
+    font-size: 18px; /* Adjust based on your preference */
+    font-family: Arial, sans-serif; /* Consistent font style */
+}
