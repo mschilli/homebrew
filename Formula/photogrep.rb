@@ -7,7 +7,7 @@ class Photogrep < Formula
     depends_on "go" => :build
 
     def install
-	system "go", "build", "-o", bin/"photogrep",
+	system "go", "build", "-o", bin/"photogrep"
     end
 
     test do
