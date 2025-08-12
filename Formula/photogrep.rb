@@ -6,7 +6,11 @@ class Photogrep < Formula
 
     depends_on "go" => :build
 
+    def install
+	system "go", "build", "-o", bin/"photogrep",
+    end
+
     test do
-	assert_match "Usage", shell_output("#{bin}/ynabler --help", 1)
+	assert_match "Usage", shell_output("#{bin}/photogrep --help", 1)
     end
 end
