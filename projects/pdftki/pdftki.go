@@ -15,12 +15,19 @@ import (
 const Version = "0.01"
 
 func main() {
-	var edit = flag.Bool("e", false, "Pop up an editor")
-	var version = flag.Bool("v", false, "Show version")
+	var edit = flag.Bool("edit", false, "Pop up an editor")
+	var eshort = flag.Bool("e", false, "Pop up an editor")
+	var version = flag.Bool("version", false, "Show version")
 	flag.Parse()
+
+	if *version {
+		fmt.Printf("%s\n", Version)
+		return
+	}
+
 	pdftkArgs := pdftkArgs(flag.Args())
 
-	if *edit {
+	if *eshort || *edit {
 		editCmd(&pdftkArgs)
 	}
 
