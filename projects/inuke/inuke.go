@@ -25,7 +25,7 @@ import (
 
 var Cache *lru.Cache
 
-const Version = "1.61"
+const Version = "1.62"
 
 func main() {
 	version := flag.Bool("version", false, "print version info")
