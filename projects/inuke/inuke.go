@@ -16,7 +16,9 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
+	"github.com/disintegration/imaging"
 	"github.com/hashicorp/golang-lru"
+	"github.com/mschilli/fyne-loupe"
 	"path"
 	"path/filepath"
 )
@@ -36,7 +38,8 @@ func main() {
 		return
 	}
 
-	win := app.New().NewWindow(versionInfo())
+	app := app.New()
+	win := app.NewWindow(versionInfo())
 
 	var err error
 
@@ -73,17 +76,17 @@ func main() {
 
 	cur := images.Front()
 	if *offset != 0 {
-	    for i := 0; i < *offset; i++ {
-		cur = scrollRight(images, cur)
-	    }
+		for i := 0; i < *offset; i++ {
+			cur = scrollRight(images, cur)
+		}
 	}
 
 	img := canvas.NewImageFromResource(nil)
 	img.SetMinSize(
 		fyne.NewSize(DspWidth, DspHeight))
 	lbl := widget.NewLabel(
-		fmt.Sprintf("%s  [H]-Left [L]-Right [D]elete " +
-		    "[U]ndo [S]tash [Q]uit", versionInfo()))
+		fmt.Sprintf("%s  [H]-Left [L]-Right [D]elete "+
+			"[U]ndo [S]tash [I]nspector [Q]uit", versionInfo()))
 	con := container.NewVBox(img, lbl)
 	win.SetContent(con)
 
@@ -120,6 +123,8 @@ func main() {
 				tr.RemoveLeft()
 			case "S":
 				toStash(cur.Value.(fyne.URI))
+			case "I":
+				inspector(app, cur.Value.(fyne.URI))
 			case "U":
 				uri := undo.Pop()
 				if uri == nil {
@@ -133,7 +138,7 @@ func main() {
 				os.Exit(0)
 			}
 			showURI(win, cur.Value.(fyne.URI),
-			    tr.Current(), images.Len())
+				tr.Current(), images.Len())
 			showImage(img,
 				cur.Value.(fyne.URI))
 			preloadImage(scrollRight(images,
@@ -149,7 +154,7 @@ func versionInfo() string {
 
 func showURI(win fyne.Window, uri fyne.URI, current int, length int) {
 	win.SetTitle(fmt.Sprintf("%s (%d of %d)",
-	    filepath.Base(uri.String()), current, length))
+		filepath.Base(uri.String()), current, length))
 }
 
 func scrollRight(l *list.List,
@@ -217,7 +222,7 @@ func (w *whackStack) WhackerStart() {
 	// Try to preload all images one by one, and whack those that can't be loaded,
 	// so inuke won't even display them later
 	if w.images.Len() == 0 {
-	    return
+		return
 	}
 	go func() {
 		e := w.images.Front()
@@ -234,4 +239,22 @@ func (w *whackStack) WhackerStart() {
 			}
 		}
 	}()
+}
+
+const ViewSize = 1000
+
+func inspector(app fyne.App, path fyne.URI) {
+	w := app.NewWindow("Full Image View")
+	img, err := imaging.Open(path.Name(), imaging.AutoOrientation(true))
+	if err != nil {
+		panic(err)
+	}
+
+	fullImage := canvas.NewImageFromImage(img)
+
+	l := loupe.NewLoupe(fullImage)
+	w.SetContent(l.Scroll)
+	w.Resize(fyne.NewSize(ViewSize, ViewSize))
+	w.Show() // make sure Center() will reflect the actual window size later
+	l.Center()
 }

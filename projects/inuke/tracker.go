@@ -25,7 +25,7 @@ func (t *Tracker) Total() int {
 }
 
 func (t *Tracker) InsertLeft() {
-    t.total += 1
+	t.total += 1
 }
 
 func (t *Tracker) MoveLeft() {
@@ -50,6 +50,6 @@ func (t *Tracker) RemoveLeft() {
 	}
 	t.total -= 1
 	if t.currentIdx > 0 {
-	    t.currentIdx -= 1
+		t.currentIdx -= 1
 	}
 }
