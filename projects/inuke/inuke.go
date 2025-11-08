@@ -23,7 +23,7 @@ import (
 
 var Cache *lru.Cache
 
-const Version = "1.63"
+const Version = "1.64"
 
 func main() {
 	version := flag.Bool("version", false, "print version info")
@@ -94,7 +94,7 @@ func main() {
 	showImage(img, cur.Value.(fyne.URI))
 	go func() {
 		fyne.Do(func() {
-			insp.PreLoad(cur.Value.(fyne.URI))
+			// insp.PreLoad(cur.Value.(fyne.URI))
 			preloadImage(scrollRight(images, cur).Value.(fyne.URI))
 		})
 	}()
@@ -150,7 +150,7 @@ func main() {
 			go func() {
 				fyne.Do(func() {
 					preloadImage(nextURL)
-					insp.PreLoad(nextURL)
+					// insp.PreLoad(nextURL)
 				})
 			}()
 

@@ -1,7 +1,7 @@
 class Inuke < Formula
     git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
-    version "1.63"
+    version "1.64"
     desc "Nuking unwanted images"
     head git_url, :using => :git
     homepage "https://github.com/mschilli"
