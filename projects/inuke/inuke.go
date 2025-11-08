@@ -146,8 +146,14 @@ func main() {
 			showImage(img,
 				cur.Value.(fyne.URI))
 			nextURL := scrollRight(images, cur).Value.(fyne.URI)
-			preloadImage(nextURL)
-			insp.PreLoad(nextURL)
+
+			go func() {
+				fyne.Do(func() {
+					preloadImage(nextURL)
+					insp.PreLoad(nextURL)
+				})
+			}()
+
 		})
 
 	win.ShowAndRun()
