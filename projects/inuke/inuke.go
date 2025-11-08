@@ -95,7 +95,7 @@ func main() {
 
 	tr := NewTracker(images.Len())
 
-	insp := NewInspector(app)
+	insp := NewInspector(app, win)
 
 	win.Canvas().SetOnTypedKey(
 		func(ev *fyne.KeyEvent) {

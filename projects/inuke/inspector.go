@@ -12,13 +12,15 @@ import (
 const ViewSize = 1000
 
 type inspector struct {
-	app   fyne.App
-	cache *lru.Cache
+	app     fyne.App
+	cache   *lru.Cache
+	mainWin fyne.Window
 }
 
-func NewInspector(app fyne.App) *inspector {
+func NewInspector(app fyne.App, mainWin fyne.Window) *inspector {
 	insp := inspector{
-		app: app,
+		app:     app,
+		mainWin: mainWin,
 	}
 
 	// TODO: NewWithEvict
@@ -33,11 +35,21 @@ func NewInspector(app fyne.App) *inspector {
 }
 
 func (i *inspector) Show(path fyne.URI) error {
-	w, err := i.Load(path)
-	if err != nil {
-		return err
+	entry, ok := i.cache.Get(path.Name())
+
+	var w fyne.Window
+	if ok {
+		w = entry.(fyne.Window)
+	} else {
+		var err error
+		w, err = i.Load(path)
+		if err != nil {
+			return err
+		}
+		i.cache.Add(path.Name(), w)
 	}
 
+	w.Hide()
 	w.Show()
 
 	return nil
@@ -58,6 +70,21 @@ func (i *inspector) Load(path fyne.URI) (fyne.Window, error) {
 	w.Resize(fyne.NewSize(ViewSize, ViewSize))
 	l.Center()
 	w.Hide()
+
+	w.SetCloseIntercept(func() {
+		w.Hide()
+		i.mainWin.Show()
+	})
+
+	w.Canvas().SetOnTypedKey(
+		func(ev *fyne.KeyEvent) {
+			key := string(ev.Name)
+			switch key {
+			case "Q":
+				w.Hide()
+				i.mainWin.Show()
+			}
+		})
 
 	return w, nil
 }
