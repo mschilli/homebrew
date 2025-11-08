@@ -7,7 +7,7 @@ require (
 	github.com/disintegration/imageorient v0.0.0-20180920195336-8147d86e83ec
 	github.com/disintegration/imaging v1.6.2
 	github.com/hashicorp/golang-lru v0.5.4
-	github.com/mschilli/fyne-loupe v0.0.1
+	github.com/mschilli/fyne-loupe v0.0.2
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 )
 

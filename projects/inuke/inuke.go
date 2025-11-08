@@ -88,14 +88,18 @@ func main() {
 	con := container.NewVBox(img, lbl)
 	win.SetContent(con)
 
+	insp := NewInspector(app, win)
+
 	showURI(win, cur.Value.(fyne.URI), 1, images.Len())
 	showImage(img, cur.Value.(fyne.URI))
-	preloadImage(scrollRight(images,
-		cur).Value.(fyne.URI))
+	go func() {
+		fyne.Do(func() {
+			insp.PreLoad(cur.Value.(fyne.URI))
+			preloadImage(scrollRight(images, cur).Value.(fyne.URI))
+		})
+	}()
 
 	tr := NewTracker(images.Len())
-
-	insp := NewInspector(app, win)
 
 	win.Canvas().SetOnTypedKey(
 		func(ev *fyne.KeyEvent) {
@@ -141,8 +145,9 @@ func main() {
 				tr.Current(), images.Len())
 			showImage(img,
 				cur.Value.(fyne.URI))
-			preloadImage(scrollRight(images,
-				cur).Value.(fyne.URI))
+			nextURL := scrollRight(images, cur).Value.(fyne.URI)
+			preloadImage(nextURL)
+			insp.PreLoad(nextURL)
 		})
 
 	win.ShowAndRun()

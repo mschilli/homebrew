@@ -55,6 +55,22 @@ func (i *inspector) Show(path fyne.URI) error {
 	return nil
 }
 
+func (i *inspector) PreLoad(path fyne.URI) error {
+	if !i.cache.Contains(path.Name()) {
+		w, err := i.Load(path)
+		if err != nil {
+			return err
+		}
+		fyne.Do(func() {
+			w.Show()
+			i.cache.Add(path.Name(), w)
+			w.Hide()
+			i.mainWin.Show()
+		})
+	}
+	return nil
+}
+
 func (i *inspector) Load(path fyne.URI) (fyne.Window, error) {
 	w := i.app.NewWindow(filepath.Base(path.Name()))
 
