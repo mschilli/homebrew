@@ -16,9 +16,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
-	"github.com/disintegration/imaging"
 	"github.com/hashicorp/golang-lru"
-	"github.com/mschilli/fyne-loupe"
 	"path"
 	"path/filepath"
 )
@@ -97,6 +95,8 @@ func main() {
 
 	tr := NewTracker(images.Len())
 
+	insp := NewInspector(app)
+
 	win.Canvas().SetOnTypedKey(
 		func(ev *fyne.KeyEvent) {
 			key := string(ev.Name)
@@ -124,7 +124,7 @@ func main() {
 			case "S":
 				toStash(cur.Value.(fyne.URI))
 			case "I":
-				inspector(app, cur.Value.(fyne.URI))
+				insp.Show(cur.Value.(fyne.URI))
 			case "U":
 				uri := undo.Pop()
 				if uri == nil {
@@ -239,22 +239,4 @@ func (w *whackStack) WhackerStart() {
 			}
 		}
 	}()
-}
-
-const ViewSize = 1000
-
-func inspector(app fyne.App, path fyne.URI) {
-	w := app.NewWindow("Full Image View")
-	img, err := imaging.Open(path.Name(), imaging.AutoOrientation(true))
-	if err != nil {
-		panic(err)
-	}
-
-	fullImage := canvas.NewImageFromImage(img)
-
-	l := loupe.NewLoupe(fullImage)
-	w.SetContent(l.Scroll)
-	w.Resize(fyne.NewSize(ViewSize, ViewSize))
-	w.Show() // make sure Center() will reflect the actual window size later
-	l.Center()
 }
