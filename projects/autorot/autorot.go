@@ -46,7 +46,7 @@ func main() {
 		Log, _ = zap.NewProduction()
 	}
 
-	Log.Debug("Reading %s", zap.String("path", jpgFile))
+	Log.Debug("Reading", zap.String("path", jpgFile))
 
 	data, err := os.ReadFile(jpgFile)
 	if err != nil {
@@ -87,7 +87,7 @@ func main() {
 	output := insertEXIF(buf.Bytes(), exifBytes)
 
 	if *dryrun {
-		Log.Debug("Exiting without writing %s in dryrun mode", zap.String("path", jpgFile))
+		Log.Debug("Exiting without writing in dryrun mode", zap.String("path", jpgFile))
 		return
 	}
 
