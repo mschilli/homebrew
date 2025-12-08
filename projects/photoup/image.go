@@ -25,7 +25,7 @@ func scaleJPG(inputPath string) error {
 		return err
 	}
 
-	maxLen := 1500
+	maxLen := 600
 	newWidth, newHeight := rescaleDims(
 		img.Bounds().Dx(), img.Bounds().Dy(), maxLen)
 
