@@ -39,7 +39,7 @@ func rescaleDims(w, h, max int) (int, int) {
 	newH := max
 
 	if w <= max && h <= max {
-	    return w, h
+		return w, h
 	}
 
 	if w > h { // landscape

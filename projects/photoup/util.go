@@ -12,7 +12,7 @@ import (
 	"path"
 )
 
-func photoDir() (string, error) {
+func photoDir(baseDir string) (string, error) {
 	randomStr := make([]byte, 32)
 	if _, err := rand.Read(randomStr); err != nil {
 		return "", err
@@ -20,20 +20,19 @@ func photoDir() (string, error) {
 	hash := sha256.Sum256(randomStr)
 	shaDir := hex.EncodeToString(hash[:])[0:30]
 
-	dir := "ph"
-
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		if err := os.MkdirAll(dir, 0755); err != nil {
+	if _, err := os.Stat(baseDir); os.IsNotExist(err) {
+		if err := os.MkdirAll(baseDir, 0755); err != nil {
 			return "", err
 		}
 
-		err := os.WriteFile(path.Join(dir, ".htaccess"), []byte("Options -Indexes\n"), 0644)
+		err := os.WriteFile(path.Join(baseDir, ".htaccess"),
+			[]byte("Options -Indexes\n"), 0644)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	path := path.Join(dir, shaDir)
+	path := path.Join(baseDir, shaDir)
 	err := os.MkdirAll(path, 0755)
 	if err != nil {
 		return "", err

@@ -12,10 +12,12 @@ import (
 	"path"
 )
 
-const Version = "0.01"
+const Version = "0.02"
 
 func main() {
 	version := flag.Bool("version", false, "print version and exit")
+	basedir := flag.String("basedir", "ph", "base directory for hash dirs")
+	delete := flag.Bool("delete", false, "delete original files")
 	flag.Parse()
 
 	if *version {
@@ -23,7 +25,7 @@ func main() {
 		return
 	}
 
-	dir, err := photoDir()
+	dir, err := photoDir(*basedir)
 	if err != nil {
 		panic(err)
 	}
@@ -63,6 +65,15 @@ func main() {
 	tpl.RenderPage(idx, "photos.html")
 
 	fmt.Printf("%s ready\n", dir)
+
+	if *delete {
+		for _, file := range flag.Args() {
+			err := os.Remove(file)
+			if err != nil {
+				panic(err)
+			}
+		}
+	}
 }
 
 func processFile(fpath string, dir string) (string, error) {
