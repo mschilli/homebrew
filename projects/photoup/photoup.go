@@ -25,6 +25,11 @@ func main() {
 		return
 	}
 
+	if flag.NArg() == 0 {
+		fmt.Printf("No input files.\n")
+		return
+	}
+
 	dir, err := photoDir(*basedir)
 	if err != nil {
 		panic(err)
