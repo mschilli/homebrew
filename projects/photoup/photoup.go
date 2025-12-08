@@ -19,8 +19,8 @@ func main() {
 	flag.Parse()
 
 	if *version {
-	    fmt.Printf("%s\n", Version)
-	    return
+		fmt.Printf("%s\n", Version)
+		return
 	}
 
 	dir, err := photoDir()

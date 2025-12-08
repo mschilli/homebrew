@@ -25,10 +25,28 @@ func scaleJPG(inputPath string) error {
 		return err
 	}
 
-	width := img.Bounds().Dx() / 4
-	height := img.Bounds().Dy() / 4
+	maxLen := 1500
+	newWidth, newHeight := rescaleDims(
+		img.Bounds().Dx(), img.Bounds().Dy(), maxLen)
 
-	thumbnail := imaging.Thumbnail(img, width, height, imaging.Lanczos)
+	thumbnail := imaging.Thumbnail(img, newWidth, newHeight, imaging.Lanczos)
 	err = imaging.Save(thumbnail, outputPath)
 	return err
+}
+
+func rescaleDims(w, h, max int) (int, int) {
+	newW := max
+	newH := max
+
+	if w <= max && h <= max {
+	    return w, h
+	}
+
+	if w > h { // landscape
+		newH = h * max / w
+	} else {
+		newW = w * max / h
+	}
+
+	return newW, newH
 }

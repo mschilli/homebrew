@@ -5,9 +5,9 @@
 package main
 
 import (
+	"embed"
 	"io"
 	tmpl "text/template"
-	"embed"
 	"time"
 )
 
