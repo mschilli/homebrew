@@ -1,7 +1,7 @@
 class Marker < Formula
     git_url = "mschilli@pdx1-shared-a1-03.dreamhost.com:git/homebrew.git"
     url git_url, :using => :git
-    version "0.03"
+    version "0.04"
     desc "Text Highlighter"
     head git_url, :using => :git
     homepage "https://github.com/mschilli"
