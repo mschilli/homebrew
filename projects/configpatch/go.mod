@@ -2,7 +2,7 @@ module configpatch
 
 go 1.26.1
 
-require github.com/mschilli/go-configpatch v0.0.1
+require github.com/mschilli/go-configpatch v0.0.3
 
 require (
 	go.uber.org/multierr v1.10.0 // indirect
