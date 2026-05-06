@@ -9,12 +9,10 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
-	"image"
 	"os"
 	"path"
 )
@@ -57,16 +55,9 @@ func main() {
 		ov.Bleach()
 	}
 
-	img := &canvas.Image{}
-	var big image.Image
-	var imgPath string
+	imgPath := flag.Args()[0]
 
-	imgPath = flag.Args()[0]
-	f, err := os.Open(imgPath)
-	if err != nil {
-		panic(err)
-	}
-	big, img = ov.loadImage(f)
+	big, img := ov.LoadImage(imgPath)
 
 	stack := container.NewStack(img, ov)
 
@@ -99,7 +90,7 @@ func main() {
 			defer reader.Close()
 
 			imgPath = reader.URI().Path()
-			big, img = ov.loadImage(reader)
+			big, img = ov.LoadImage(imgPath)
 			stack.Objects[0] = img
 			stack.Refresh()
 		}, w).Show()

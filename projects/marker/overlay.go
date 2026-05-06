@@ -12,7 +12,7 @@ import (
 	"github.com/disintegration/imaging"
 	"image"
 	"image/draw"
-	"io"
+	"strings"
 )
 
 type Overlay struct {
@@ -103,10 +103,20 @@ func (t *Overlay) SaveBig(big image.Image, path string) error {
 	return nil
 }
 
-func (t *Overlay) loadImage(r io.Reader) (image.Image, *canvas.Image) {
-	big, err := imaging.Decode(r, imaging.AutoOrientation(true))
-	if err != nil {
-		panic(err)
+func (t *Overlay) LoadImage(path string) (image.Image, *canvas.Image) {
+	var big image.Image
+        var err error
+
+	if strings.HasSuffix(path, ".pdf") {
+	    big, err = openPDF(path, 0)
+	    if err != nil {
+		    panic(err)
+	    }
+	} else {
+	    big, err = imaging.Open(path, imaging.AutoOrientation(true))
+	    if err != nil {
+		    panic(err)
+	    }
 	}
 
 	shrunk := imaging.Resize(big, Width, 0, imaging.Lanczos)
