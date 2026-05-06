@@ -1,12 +1,12 @@
 package main
 
 import (
-    "fmt"
-    "image"
-    "bytes"
-    "image/png"
+	"bytes"
+	"fmt"
 	fitz "github.com/gen2brain/go-fitz"
 	"github.com/jung-kurt/gofpdf"
+	"image"
+	"image/png"
 )
 
 func openPDF(pdfPath string, page int) (image.Image, error) {

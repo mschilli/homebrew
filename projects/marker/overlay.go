@@ -95,9 +95,16 @@ func (t *Overlay) SaveBig(big image.Image, path string) error {
 		draw.Draw(dimg, r, &image.Uniform{t.rect.Color}, r.Min, draw.Over)
 	}
 
-	err := imaging.Save(dimg, path)
-	if err != nil {
-		return err
+	if strings.HasSuffix(path, ".pdf") {
+		err := writePDF(dimg, path)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := imaging.Save(dimg, path)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -105,18 +112,18 @@ func (t *Overlay) SaveBig(big image.Image, path string) error {
 
 func (t *Overlay) LoadImage(path string) (image.Image, *canvas.Image) {
 	var big image.Image
-        var err error
+	var err error
 
 	if strings.HasSuffix(path, ".pdf") {
-	    big, err = openPDF(path, 0)
-	    if err != nil {
-		    panic(err)
-	    }
+		big, err = openPDF(path, 0)
+		if err != nil {
+			panic(err)
+		}
 	} else {
-	    big, err = imaging.Open(path, imaging.AutoOrientation(true))
-	    if err != nil {
-		    panic(err)
-	    }
+		big, err = imaging.Open(path, imaging.AutoOrientation(true))
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	shrunk := imaging.Resize(big, Width, 0, imaging.Lanczos)
