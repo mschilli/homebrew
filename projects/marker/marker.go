@@ -19,7 +19,7 @@ import (
 	"path"
 )
 
-const Version = "0.04"
+const Version = "0.05"
 
 const (
 	Width  = 800
@@ -108,11 +108,24 @@ func main() {
 	saveBtn := widget.NewButton("Save", func() {
 		ov.SaveBig(big, imgPath)
 	})
+
+	saveAsBtn := widget.NewButton("Save As", func() {
+		dialog.ShowFileSave(func(writer fyne.URIWriteCloser, err error) {
+			if err != nil || writer == nil {
+				return
+			}
+			defer writer.Close()
+
+			path := writer.URI().Path()
+			ov.SaveBig(big, path)
+		}, w)
+	})
+
 	quitBtn := widget.NewButton("Quit", func() {
 		os.Exit(0)
 	})
 
-	buttons := container.NewHBox(openBtn, saveBtn, quitBtn)
+	buttons := container.NewHBox(openBtn, saveBtn, saveAsBtn, quitBtn)
 	w.SetContent(container.NewVBox(buttons, stack))
 	w.ShowAndRun()
 }
