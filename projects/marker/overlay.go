@@ -35,6 +35,10 @@ func NewOverlay() *Overlay {
 	return over
 }
 
+func (t *Overlay) Bleach() {
+	t.rect.Bleach()
+}
+
 func (t *Overlay) CreateRenderer() fyne.WidgetRenderer {
 	return widget.NewSimpleRenderer(t.con)
 }
@@ -42,13 +46,13 @@ func (t *Overlay) CreateRenderer() fyne.WidgetRenderer {
 func (t *Overlay) Dragged(e *fyne.DragEvent) {
 	if t.inMotion == false {
 		// just started
-		rect := canvas.NewRectangle(t.rect.Color())
+		rect := canvas.NewRectangle(t.rect.Color)
 		if t.CmdPressed {
 			t.markers = append(t.markers, rect)
 		} else {
-			    for _, marker := range t.markers {
+			for _, marker := range t.markers {
 				t.con.Remove(marker)
-			    }
+			}
 			t.markers = []*canvas.Rectangle{rect}
 		}
 
@@ -88,7 +92,7 @@ func (t *Overlay) SaveBig(big image.Image, path string) error {
 			rect.From.Y+fyRect.Size().Height,
 		)
 		r := rect.AsImage(t.zoom)
-		draw.Draw(dimg, r, &image.Uniform{t.rect.Color()}, r.Min, draw.Over)
+		draw.Draw(dimg, r, &image.Uniform{t.rect.Color}, r.Min, draw.Over)
 	}
 
 	err := imaging.Save(dimg, path)

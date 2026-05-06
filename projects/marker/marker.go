@@ -35,6 +35,7 @@ func usage() {
 func main() {
 	flag.Usage = usage
 	version := flag.Bool("version", false, "print version")
+	bleach := flag.Bool("bleach", false, "bleach instead of highlight")
 	flag.Parse()
 
 	if *version {
@@ -42,7 +43,7 @@ func main() {
 		return
 	}
 
-	if len(flag.Args()) != 1 {
+	if flag.NArg() != 1 {
 		usage()
 	}
 
@@ -52,18 +53,20 @@ func main() {
 
 	ov := NewOverlay()
 
+	if *bleach {
+		ov.Bleach()
+	}
+
 	img := &canvas.Image{}
 	var big image.Image
 	var imgPath string
 
-	if len(os.Args) == 2 {
-		imgPath = os.Args[1]
-		f, err := os.Open(imgPath)
-		if err != nil {
-			panic(err)
-		}
-		big, img = ov.loadImage(f)
+	imgPath = flag.Args()[0]
+	f, err := os.Open(imgPath)
+	if err != nil {
+		panic(err)
 	}
+	big, img = ov.loadImage(f)
 
 	stack := container.NewStack(img, ov)
 

@@ -11,13 +11,20 @@ import (
 )
 
 type Rect struct {
-	From fyne.Position
-	To   fyne.Position
-	Zoom float64
+	From  fyne.Position
+	To    fyne.Position
+	Zoom  float64
+	Color color.NRGBA
 }
 
 func NewRect() *Rect {
-	return &Rect{}
+	return &Rect{
+		Color: color.NRGBA{R: 204, G: 255, B: 0, A: 50},
+	}
+}
+
+func (r *Rect) Bleach() {
+	r.Color = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
 }
 
 func (r *Rect) Dims() (fyne.Position, fyne.Size) {
@@ -53,8 +60,4 @@ func (r *Rect) AsImage(zoom float64) image.Rectangle {
 	}
 
 	return rect
-}
-
-func (r *Rect) Color() color.NRGBA {
-	return color.NRGBA{R: 204, G: 255, B: 0, A: 50}
 }
