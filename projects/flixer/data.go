@@ -85,11 +85,27 @@ func VisiblePickIndexes(picks []Pick, includeUpcoming bool) []int {
 	indexes := []int{}
 
 	for i, pick := range picks {
-		if !includeUpcoming && strings.Contains(pick.Title, "(upcoming)") {
+		if !includeUpcoming && IsUpcoming(pick) {
 			continue
 		}
 		indexes = append(indexes, i)
 	}
 
 	return indexes
+}
+
+func UpcomingPickIndexes(picks []Pick) []int {
+	indexes := []int{}
+
+	for i, pick := range picks {
+		if IsUpcoming(pick) {
+			indexes = append(indexes, i)
+		}
+	}
+
+	return indexes
+}
+
+func IsUpcoming(pick Pick) bool {
+	return strings.Contains(pick.Title, "(upcoming)")
 }

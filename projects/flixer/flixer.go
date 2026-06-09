@@ -16,14 +16,23 @@ import (
 
 func main() {
 	upcoming := flag.Bool("upcoming", false, "show titles containing (upcoming)")
+	checkUpcoming := flag.Bool("check-upcoming", false, "check upcoming Netflix titles without starting the UI")
 	flag.Parse()
+
+	picker := NewPicker()
+
+	if *checkUpcoming {
+		if err := CheckUpcoming(picker.Load()); err != nil {
+			panic(err)
+		}
+		return
+	}
 
 	if err := ui.Init(); err != nil {
 		panic(err)
 	}
 	defer ui.Close()
 
-	picker := NewPicker()
 	picks := picker.Load()
 	visiblePickIndexes := VisiblePickIndexes(picks, *upcoming)
 
