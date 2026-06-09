@@ -1,7 +1,7 @@
 class Flixer < Formula
     git_url = "https://github.com/mschilli/homebrew"
     url git_url, :using => :git
-    version "0.0.1"
+    version "0.1"
     desc "Terminal UI maintaining state on Netflix and other streaming offers"
     head git_url, :using => :git
     homepage "https://github.com/mschilli"
