@@ -72,7 +72,7 @@ func CheckUpcoming(picks []Pick) error {
 
 func checkNetflixTitle(page playwright.Page, check upcomingCheck) (upcomingCheckResult, error) {
 	title := cleanUpcomingTitle(check.Title)
-	searchURL := "https://www.justwatch.com/us/search?q=" + url.QueryEscape(title)
+	searchURL := JustWatchSearchURL(check.Title)
 	result := upcomingCheckResult{
 		JustWatchURL: searchURL,
 	}
@@ -248,6 +248,10 @@ func scalarValues(values interface{}) []interface{} {
 
 func cleanUpcomingTitle(value string) string {
 	return normalizeText(strings.ReplaceAll(value, "(upcoming)", " "))
+}
+
+func JustWatchSearchURL(title string) string {
+	return "https://www.justwatch.com/us/search?q=" + url.QueryEscape(cleanUpcomingTitle(title))
 }
 
 func titleLines(values []string) []string {

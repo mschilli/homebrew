@@ -150,6 +150,13 @@ func main() {
 			picker.Save(picks)
 			runFirefox(picks[idx].URL)
 
+		case "w":
+			if len(visiblePickIndexes) == 0 {
+				continue
+			}
+			idx := visiblePickIndexes[lb.SelectedRow]
+			runFirefox(JustWatchSearchURL(picks[idx].Title))
+
 		case "<MouseLeft>":
 			if len(visiblePickIndexes) == 0 {
 				continue
