@@ -7,6 +7,7 @@ package main
 import (
   "gopkg.in/yaml.v2"
   "os"
+  "path/filepath"
   "sort"
 )
 
@@ -22,8 +23,13 @@ type Picker struct {
 }
 
 func NewPicker() *Picker {
+  home, err := os.UserHomeDir()
+  if err != nil {
+    panic(err)
+  }
+
   return &Picker{
-    YAMLPath: "flixer.yaml",
+    YAMLPath: filepath.Join(home, ".flixer.yaml"),
   }
 }
 
