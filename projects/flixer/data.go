@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 )
 
 type Pick struct {
@@ -78,4 +79,17 @@ func (p *Picker) Save(picks []Pick) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func VisiblePickIndexes(picks []Pick, includeUpcoming bool) []int {
+	indexes := []int{}
+
+	for i, pick := range picks {
+		if !includeUpcoming && strings.Contains(pick.Title, "(upcoming)") {
+			continue
+		}
+		indexes = append(indexes, i)
+	}
+
+	return indexes
 }

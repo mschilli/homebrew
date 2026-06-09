@@ -5,6 +5,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"net/url"
 	"time"
@@ -14,6 +15,9 @@ import (
 )
 
 func main() {
+	upcoming := flag.Bool("upcoming", false, "show titles containing (upcoming)")
+	flag.Parse()
+
 	if err := ui.Init(); err != nil {
 		panic(err)
 	}
@@ -21,6 +25,7 @@ func main() {
 
 	picker := NewPicker()
 	picks := picker.Load()
+	visiblePickIndexes := VisiblePickIndexes(picks, *upcoming)
 
 	lb := widgets.NewList()
 	lb.Title = "Movies"
@@ -65,11 +70,24 @@ func main() {
 
 	render := func() {
 		lb.Rows = []string{}
-		for _, it := range picks {
+		for _, idx := range visiblePickIndexes {
+			it := picks[idx]
 			lb.Rows = append(lb.Rows, it.Title)
 		}
 
-		it := picks[lb.SelectedRow]
+		if len(visiblePickIndexes) == 0 {
+			info.Text = "No movies"
+			rate.Rating = 0
+			rate.Update()
+			ui.Render(grid)
+			return
+		}
+
+		if lb.SelectedRow >= len(visiblePickIndexes) {
+			lb.SelectedRow = len(visiblePickIndexes) - 1
+		}
+
+		it := picks[visiblePickIndexes[lb.SelectedRow]]
 
 		setInfo(it)
 
@@ -94,6 +112,7 @@ func main() {
 			ui.Init()
 
 			picks = picker.Load()
+			visiblePickIndexes = VisiblePickIndexes(picks, *upcoming)
 			render()
 
 		case "<Resize>":
@@ -102,7 +121,7 @@ func main() {
 			render()
 
 		case "j":
-			if lb.SelectedRow < len(picks)-1 {
+			if lb.SelectedRow < len(visiblePickIndexes)-1 {
 				lb.SelectedRow++
 				render()
 			}
@@ -114,13 +133,20 @@ func main() {
 			}
 
 		case "<Enter>":
-			picks[lb.SelectedRow].Date = time.Now().Format("2006-01-02")
+			if len(visiblePickIndexes) == 0 {
+				continue
+			}
+			idx := visiblePickIndexes[lb.SelectedRow]
+			picks[idx].Date = time.Now().Format("2006-01-02")
 			picker.Save(picks)
-			runFirefox(picks[lb.SelectedRow].URL)
+			runFirefox(picks[idx].URL)
 
 		case "<MouseLeft>":
+			if len(visiblePickIndexes) == 0 {
+				continue
+			}
 			rate.MouseEvent(e.Payload.(ui.Mouse))
-			picks[lb.SelectedRow].Rating = rate.Rating
+			picks[visiblePickIndexes[lb.SelectedRow]].Rating = rate.Rating
 			picker.Save(picks)
 			render()
 		}
