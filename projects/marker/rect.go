@@ -27,6 +27,10 @@ func (r *Rect) Bleach() {
 	r.Color = color.NRGBA{R: 255, G: 255, B: 255, A: 255}
 }
 
+func (r *Rect) Red() {
+	r.Color = color.NRGBA{R: 0xec, G: 0x15, B: 0x11, A: 70}
+}
+
 func (r *Rect) Dims() (fyne.Position, fyne.Size) {
 	x := r.From.X
 	y := r.From.Y

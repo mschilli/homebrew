@@ -39,6 +39,10 @@ func (t *Overlay) Bleach() {
 	t.rect.Bleach()
 }
 
+func (t *Overlay) Red() {
+	t.rect.Red()
+}
+
 func (t *Overlay) CreateRenderer() fyne.WidgetRenderer {
 	return widget.NewSimpleRenderer(t.con)
 }

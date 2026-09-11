@@ -17,7 +17,7 @@ import (
 	"path"
 )
 
-const Version = "0.05"
+const Version = "0.06"
 
 const (
 	Width  = 800
@@ -34,6 +34,7 @@ func main() {
 	flag.Usage = usage
 	version := flag.Bool("version", false, "print version")
 	bleach := flag.Bool("bleach", false, "bleach instead of highlight")
+	red := flag.Bool("red", false, "reddish marker instead of yellow")
 	flag.Parse()
 
 	if *version {
@@ -53,6 +54,10 @@ func main() {
 
 	if *bleach {
 		ov.Bleach()
+	}
+
+	if *red {
+		ov.Red()
 	}
 
 	imgPath := flag.Args()[0]
